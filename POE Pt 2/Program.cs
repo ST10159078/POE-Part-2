@@ -9,6 +9,7 @@ using System.Xml.Linq;
 
 namespace POE_Pt_2
 {
+    // Class representing an ingredient in a recipe
     class Ingredient
     {
         public string Name { get; set; }
