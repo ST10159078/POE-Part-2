@@ -1,4 +1,4 @@
-﻿using POE_Pt_2;
+using POE_Pt_2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +19,7 @@ namespace POE_Pt_2
         public FoodGroup Group { get; set; }
     }
 
+    // Enumeration representing different food groups
     enum FoodGroup
     {
         Grains,
@@ -29,6 +30,7 @@ namespace POE_Pt_2
         Fats
     }
 
+    // Class representing a recipe
     class Recipe
     {
         public string Name { get; set; }
@@ -43,6 +45,7 @@ namespace POE_Pt_2
             originalQuantities = new List<double>();
         }
 
+        // Method to enter details of a recipe
         public void EnterRecipe()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
@@ -93,6 +96,7 @@ namespace POE_Pt_2
             }
         }
 
+        // Method to display the recipe details
         public void DisplayRecipe()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -110,6 +114,7 @@ namespace POE_Pt_2
             }
         }
 
+        // Method to scale the recipe by a given factor
         public void ScaleRecipe(double factor)
         {
             foreach (Ingredient ingredient in Ingredients)
@@ -120,6 +125,7 @@ namespace POE_Pt_2
             }
         }
 
+        // Method to reset the quantities of ingredients to the original values
         public void ResetQuantities()
         {
             if (originalQuantities.Count == Ingredients.Count)
@@ -138,6 +144,7 @@ namespace POE_Pt_2
             }
         }
 
+        // Method to calculate the total calories of the recipe
         public int CalculateTotalCalories()
         {
             int totalCalories = 0;
@@ -149,6 +156,8 @@ namespace POE_Pt_2
         }
     }
 
+
+    // Class representing the recipe application
     class RecipeApplication
     {
         private List<Recipe> recipes;
@@ -158,12 +167,19 @@ namespace POE_Pt_2
             recipes = new List<Recipe>();
         }
 
+        // Method to add a recipe to the application
         public void AddRecipe(Recipe recipe)
         {
             recipes.Add(recipe);
             recipe.DisplayRecipe();
+            int totalCalories = recipe.CalculateTotalCalories();
+            if (totalCalories > 300)
+            {
+                RecipeExceededCalories?.Invoke(recipe.Name);
+            }
         }
 
+        // Method to display the list of recipes in alphabetical order by name
         public void DisplayRecipeList()
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -175,6 +191,7 @@ namespace POE_Pt_2
             }
         }
 
+        // Method to display a recipe by its name
         public void DisplayRecipeByName(string name)
         {
             Recipe recipe = recipes.FirstOrDefault(r => string.Equals(r.Name, name, StringComparison.OrdinalIgnoreCase));
@@ -194,6 +211,7 @@ namespace POE_Pt_2
             }
         }
 
+        // Method to scale a recipe by its name
         public void ScaleRecipeByName(string name, double factor)
         {
             Recipe recipe = recipes.FirstOrDefault(r => string.Equals(r.Name, name, StringComparison.OrdinalIgnoreCase));
@@ -209,6 +227,7 @@ namespace POE_Pt_2
             }
         }
 
+        // Method to reset the quantities of a recipe by its name
         public void ResetQuantitiesByName(string name)
         {
             Recipe recipe = recipes.FirstOrDefault(r => string.Equals(r.Name, name, StringComparison.OrdinalIgnoreCase));
@@ -224,6 +243,7 @@ namespace POE_Pt_2
             }
         }
 
+        // Method to clear all recipes
         public void ClearRecipes()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -231,8 +251,10 @@ namespace POE_Pt_2
             Console.WriteLine("All recipes cleared.");
         }
 
+        // Event to notify when a recipe exceeds 300 calories
         public event Action<string> RecipeExceededCalories;
 
+        // Method to run the recipe application
         public void RunApplication()
         {
             while (true)
